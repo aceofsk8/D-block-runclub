@@ -1,34 +1,32 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-
-
-app = Flask(__name__)
 import os
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "sqlite:///runs.db")
 
+# Initialize Flask app
+app = Flask(__name__)
+
+# Configure database
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "sqlite:///runs.db")
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False  # Avoids warnings
+
+# Initialize database and migrations
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
-class Profile(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False, unique=True)
-
-class Run(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'), nullable=False)
-    date = db.Column(db.String(10), nullable=False)
-    distance = db.Column(db.Float, nullable=False)
-    run_time = db.Column(db.String(10), nullable=False)  # Format MM:SS
-    heart_rate = db.Column(db.Integer, nullable=False)
+# Import models AFTER initializing db
+from models import Profile, Run
 
 @app.route('/')
 def home():
+    """Homepage - Displays all profiles."""
     profiles = Profile.query.all()
     return render_template("index.html", profiles=profiles, selected_profile=None,
                            total_miles=0, avg_pace="--:--", avg_hr="--")
 
 @app.route('/select_profile', methods=['POST'])
 def select_profile():
+    """Handles selecting a profile and displaying its run data."""
     profile_id = request.form.get('profile_id')
     selected_profile = Profile.query.get(profile_id)
 
@@ -52,8 +50,10 @@ def select_profile():
                                total_miles=round(total_miles, 2), avg_pace=avg_pace, avg_hr=avg_hr)
     
     return redirect(url_for('home'))
+
 @app.route('/add_run', methods=['POST'])
 def add_run():
+    """Handles adding a new run to the database."""
     profile_name = request.form.get('profile_name')
     date = request.form.get('date')
     distance = request.form.get('distance')
@@ -79,6 +79,7 @@ def add_run():
 
 @app.route('/profile/<int:profile_id>')
 def view_profile(profile_id):
+    """Displays an individual profile and its run stats."""
     profiles = Profile.query.all()
     selected_profile = Profile.query.get_or_404(profile_id)
     runs = Run.query.filter_by(profile_id=selected_profile.id).all()
