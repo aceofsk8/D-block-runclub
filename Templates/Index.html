@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D-Block RunClub</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>D-Block RunClub</h1>
+    </div>
+
+    <div class="main-container">
+        <!-- Sidebar: Logo + Leaderboard -->
+        <div class="sidebar">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="D-Block RunClub Logo" class="logo">
+            <div class="leaderboard">
+                <h2>Leaderboard</h2>
+                <ol>
+                    {% for run in runs %}
+                        <li>{{ run.profile.name }} - {{ run.distance }} miles</li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+
+        <!-- Profile Selection Section -->
+        <div class="profile-selection">
+            <form action="/select_profile" method="POST">
+                <label for="profile_id">Select Profile:</label>
+                <select id="profile_id" name="profile_id">
+                    <option value="" disabled selected>-- Choose a Profile --</option>
+                    {% for profile in profiles %}
+                        <option value="{{ profile.id }}">{{ profile.name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">View Runs</button>
+            </form>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-section">
+            <p>Enter your run details below:</p>
+            <form action="/add_run" method="POST">
+                <label for="profile_name">Profile Name:</label>
+                <input type="text" id="profile_name" name="profile_name" required><br><br>
+
+                <label for="date">Date (MM/DD/YYYY):</label>
+                <input type="text" id="date" name="date" required><br><br>
+
+                <label for="distance">Distance (miles):</label>
+                <input type="number" id="distance" name="distance" step="0.01" required><br><br>
+
+                <label for="run_time">Run Time (MM:SS):</label>
+                <input type="text" id="run_time" name="run_time" required><br><br>
+
+                <label for="heart_rate">Heart Rate (bpm):</label>
+                <input type="number" id="heart_rate" name="heart_rate" required><br><br>
+
+                <button type="submit">Submit Run</button>
+            </form>
+        </div>
+
+        <!-- Data Display Section -->
+        <div class="data-display">
+            <h2>Data Display</h2>
+            <h3>Runs for {{ selected_profile.name if selected_profile else 'Select a Profile' }}</h3>
+            <ul class="stats">
+                <li>Total Miles: <span>{{ total_miles if total_miles else '0' }}</span></li>
+                <li>Avg Pace: <span>{{ avg_pace if avg_pace else '--:--' }}</span></li>
+                <li>Avg HR: <span>{{ avg_hr if avg_hr else '--' }}</span></li>
+            </ul>
+        </div>
+        

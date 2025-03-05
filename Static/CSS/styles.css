@@ -1,0 +1,118 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #00FFFF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding-top: 20px;
+}
+
+.header {
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.main-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    gap: 50px;
+    width: 85%;
+    align-items: start;
+    justify-content: center;
+}
+
+.left-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+.logo {
+    max-width: 250px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.leaderboard {
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+    width: 250px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.middle-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+    justify-content: center;
+}
+
+.profile-selection {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-section {
+    background-color: #1e1e1e;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 600px;
+    text-align: center;
+    width: 100%;
+}
+
+.right-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    justify-content: start;
+    gap: 30px;
+}
+
+.data-display {
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+    text-align: center;
+    font-size: 22px;
+    width: 100%;
+}
+
+.data-display ul {
+    list-style: none;
+    padding: 0;
+}
+
+.data-display ul li {
+    margin: 10px 0;
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.data-display .stats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.data-display .stats::before {
+    content: "Total Miles:\a Avg Pace:\a Avg HR:";
+    white-space: pre-line;
+    font-size: 24px;
+    font-weight: bold;
+}
